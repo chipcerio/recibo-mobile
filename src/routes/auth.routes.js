@@ -21,6 +21,9 @@ export const AuthNavigator = () => {
       <AuthStack.Screen
         name={SCREEN.LOGIN_SCREEN}
         component={LoginScreen}
+        options={{
+          headerShown: false
+        }}
       />
       <AuthStack.Screen
         name={SCREEN.REGISTRATION_SCREEN}

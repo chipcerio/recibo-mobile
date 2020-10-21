@@ -24,17 +24,23 @@ const IntNavigation = props => {
         <InitialStack.Screen
           name={SCREEN.AUTHORIZATION}
           component={Authorization}
-          options={{header: () => false}}
+          options={{
+            headerShown: false
+          }}
         />
         <InitialStack.Screen
           name={SCREEN.APP_NAVIGATOR}
           component={AppNavigator}
-          options={{header: () => false}}
+          options={{
+            headerShown: false
+          }}
         />
         <InitialStack.Screen
           name={SCREEN.AUTH_NAVIGATOR}
           component={AuthNavigator}
-          options={{header: () => false}}
+          options={{
+            headerShown: false
+          }}
         />
       </InitialStack.Navigator>
     </NavigationContainer>

@@ -10,18 +10,19 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/store';
 import Amplify from 'aws-amplify';
-import config from './src/config/aws.config.json'
-
-const {store, persistor} = configureStore();
+import config from './src/config/aws.config'
 
 Amplify.configure({
   Auth: {
-    mandatorySignId: true,
+    mandatorySignIn: true,
     region: config.cognito.REGION,
     userPoolId: config.cognito.USER_POOL_ID,
-    userPoolWebClientId: config.cognito.APP_CLIENT_ID
+    identityPoolId: config.cognito.IDENTITY_POOL_ID,
+    userPoolWebClientId: config.cognito.APP_CLIENT_ID,
   }
 });
+
+const {store, persistor} = configureStore();
 
 function HeadlessCheck({isHeadless}) {
   if (isHeadless) {

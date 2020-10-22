@@ -1,4 +1,4 @@
-export const numConverted = (num) => {
+export const numConverted = num => {
   if (num < 10) {
     return '0' + num;
   } else {
@@ -19,8 +19,10 @@ export const dateToString = date => {
     );
   } else {
     const converted_date =
-      new Date().getFullYear() + '-' +
-      numConverted(new Date().getMonth() + 1) + '-' +
+      new Date().getFullYear() +
+      '-' +
+      numConverted(new Date().getMonth() + 1) +
+      '-' +
       numConverted(new Date().getDate());
     return converted_date;
   }
@@ -39,8 +41,10 @@ export const timeToString = date => {
     );
   } else {
     const convertedTime =
-      numConverted(new Date().getHours()) + ':' +
-      numConverted(new Date().getMinutes()) + ':' +
+      numConverted(new Date().getHours()) +
+      ':' +
+      numConverted(new Date().getMinutes()) +
+      ':' +
       numConverted(new Date().getSeconds());
     return convertedTime;
   }

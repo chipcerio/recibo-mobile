@@ -19,9 +19,9 @@ export const CognitoAuthModel = (model) => ({
         token: model.refreshToken.token ? model.refreshToken.token : null
     },
     accessToken: {
-        jwtToken: model.idToken.jwtToken ? model.idToken.jwtToken : null,
+        jwtToken: model.accessToken.jwtToken ? model.accessToken.jwtToken : null,
         payload: {
-            sub: model.idToken.payload.sub ? model.idToken.payload.sub : null,
+            sub: model.accessToken.payload.sub ? model.accessToken.payload.sub : null,
             event_id: model.accessToken.payload.event_id ? model.accessToken.payload.event_id : null,
             token_use: model.accessToken.payload.token_use ? model.accessToken.payload.token_use : null,
             scope: model.accessToken.payload.scope ? model.accessToken.payload.scope : null,

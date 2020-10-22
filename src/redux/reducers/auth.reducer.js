@@ -14,9 +14,6 @@ import {
 
 const INITIAL_STATE = {
   token: '',
-  expires_in: 0,
-  last_login: '',
-  user_type: '',
   user: {},
   is_internet_connected: false
 };

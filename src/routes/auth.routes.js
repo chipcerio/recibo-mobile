@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import LoginScreen from '../screens/Login/LoginScreen';
 
-import {createStackNavigator} from '@react-navigation/stack';
-import {fromRight} from 'react-navigation-transitions';
+import { createStackNavigator } from '@react-navigation/stack';
+import { fromRight } from 'react-navigation-transitions';
 import * as SCREEN from '../constants/screen.constant';
 import RegistrationScreen from '../screens/Registration/RegistrationScreen';
 
@@ -22,7 +22,7 @@ export const AuthNavigator = () => {
         name={SCREEN.LOGIN_SCREEN}
         component={LoginScreen}
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
       <AuthStack.Screen

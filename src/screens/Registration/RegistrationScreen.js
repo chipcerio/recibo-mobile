@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import Input from '../../components/Input/Input';
 import styles from './styles';
-import {useForm} from 'react-hook-form';
-import {EMAIL, PASSWORD, CONFIRM_PASSWORD, USERNAME} from '../../constants/field.constant';
+import { useForm } from 'react-hook-form';
+import {
+  EMAIL,
+  PASSWORD,
+  CONFIRM_PASSWORD,
+  USERNAME,
+} from '../../constants/field.constant';
 import CommonButton from '../../components/CommonButton/CommonButton';
 import * as SCREEN from '../../constants/screen.constant';
 import {
@@ -26,63 +31,68 @@ const RegistrationScreen = () => {
     username: '',
     email: '',
     password: '',
-    confirm_password: ''
+    confirm_password: '',
   });
   const values = watch();
   const navigation = useNavigation();
   const [invalid, setInvalid] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     register(
-      {name: EMAIL},
+      { name: EMAIL },
       {
         required: true,
         pattern: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/,
       },
     );
-    register({name: PASSWORD}, {required: true});
-    register({name: CONFIRM_PASSWORD}, {required: true});
+    register({ name: PASSWORD }, { required: true });
+    register({ name: CONFIRM_PASSWORD }, { required: true });
   }, [register]);
 
-  const emailHandler = async (val) => {
+  const emailHandler = async val => {
     setValue(EMAIL, val, true);
     await trigger([EMAIL]);
   };
 
-  const passwordHandler = async (val) => {
+  const passwordHandler = async val => {
     setValue(PASSWORD, val, true);
     await trigger([PASSWORD]);
   };
 
-  const confirmPasswordHandler = async (val) => {
+  const confirmPasswordHandler = async val => {
     setValue(CONFIRM_PASSWORD, val, true);
     await trigger([CONFIRM_PASSWORD]);
   };
 
-  const signUp = async (val) => {
-    const {email, password} = val;
+  const signUp = async val => {
+    const { email, password } = val;
     try {
+      setLoading(true);
       const signUpResponse = await Auth.signUp({
         username: email,
         password,
       });
       console.log('signUpResponse', signUpResponse);
+      setLoading(false);
       setInvalid({});
     } catch (err) {
       console.log('error: ', err);
       let wrong = null;
-      !err.message ? wrong = { message: err } : wrong = err;
-      if (err) setInvalid((prevState) => ({
-        ...prevState,
-        cognito: err
-      }));;
+      !err.message ? (wrong = { message: err }) : (wrong = err);
+      if (err)
+        setInvalid(prevState => ({
+          ...prevState,
+          cognito: err,
+        }));
+      setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.loginContainer}>
-        <View style={{paddingBottom: 10}}>
+        <View style={{ paddingBottom: 10 }}>
           <Input
             label="Email"
             value={values.email ? values.email : ''}
@@ -90,10 +100,10 @@ const RegistrationScreen = () => {
             keyboardType="email-address"
           />
           {errors.email && (
-            <Text style={{color: '#cc0000'}}>Email is required.</Text>
+            <Text style={{ color: '#cc0000' }}>Email is required.</Text>
           )}
         </View>
-        <View style={{paddingVertical: 10}}>
+        <View style={{ paddingVertical: 10 }}>
           <Input
             label="Password"
             value={values.password ? values.password : ''}
@@ -101,10 +111,10 @@ const RegistrationScreen = () => {
             secureTextEntry={true}
           />
           {errors.password && (
-            <Text style={{color: '#cc0000'}}>Password is required.</Text>
+            <Text style={{ color: '#cc0000' }}>Password is required.</Text>
           )}
         </View>
-        <View style={{paddingVertical: 10}}>
+        <View style={{ paddingVertical: 10 }}>
           <Input
             label="Confirm Password"
             value={values.confirm_password ? values.confirm_password : ''}
@@ -112,17 +122,19 @@ const RegistrationScreen = () => {
             secureTextEntry={true}
           />
           {errors.confirm_password && (
-            <Text style={{color: '#cc0000'}}>Confirm Password is required.</Text>
+            <Text style={{ color: '#cc0000' }}>
+              Confirm Password is required.
+            </Text>
           )}
         </View>
         <View style={styles.loginButtonContainer}>
           <CommonButton onPress={handleSubmit(signUp)} label="Sign Up" />
         </View>
-        {JSON.stringify(invalid) !== '{}' && <View style={{ marginTop: 20 }}>
-            <Text style={{color: '#cc0000'}}>
-              {invalid.cognito.message}
-            </Text>
-        </View>}
+        {JSON.stringify(invalid) !== '{}' && (
+          <View style={{ marginTop: 20 }}>
+            <Text style={{ color: '#cc0000' }}>{invalid.cognito.message}</Text>
+          </View>
+        )}
       </View>
     </View>
   );

@@ -35,6 +35,7 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+  const [error_message, setErrorMessage] = useState('');
 
   useEffect(() => {
     register({ name: EMAIL }, { required: true });
@@ -53,6 +54,7 @@ const LoginScreen = () => {
 
   const login = async val => {
     try {
+      setErrorMessage('');
       setLoading(true);
       const response = await Auth.signIn({
         username: val.email,
@@ -70,7 +72,9 @@ const LoginScreen = () => {
       navigation.dispatch(resetAction);
     } catch (error) {
       setLoading(false);
-      console.log('login error', error);
+      let wrong = null;
+      !error.message ? (wrong = { message: error }) : (wrong = error);
+      setErrorMessage(wrong.message);
     }
   };
 
@@ -101,6 +105,11 @@ const LoginScreen = () => {
             <Text style={{ color: '#cc0000' }}>Password is required.</Text>
           )}
         </View>
+        {error_message !== '' && (
+          <View style={{ marginVertical: 10 }}>
+            <Text style={{ color: '#cc0000' }}>{error_message}</Text>
+          </View>
+        )}
         <View style={styles.loginButtonContainer}>
           <CommonButton
             onPress={handleSubmit(login)}

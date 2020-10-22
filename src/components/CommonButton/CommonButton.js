@@ -33,7 +33,7 @@ const CommonButton = props => {
           {loader && (
             <ActivityIndicator
               style={{ marginLeft: 10 }}
-              size={25}
+              size={15}
               color="#FFF"
             />
           )}

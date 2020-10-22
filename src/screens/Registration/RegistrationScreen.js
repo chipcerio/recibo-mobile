@@ -35,8 +35,9 @@ const RegistrationScreen = () => {
   });
   const values = watch();
   const navigation = useNavigation();
-  const [invalid, setInvalid] = useState({});
+  const [error_message, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [validated, setValidated] = useState(false);
 
   useEffect(() => {
     register(
@@ -53,21 +54,48 @@ const RegistrationScreen = () => {
   const emailHandler = async val => {
     setValue(EMAIL, val, true);
     await trigger([EMAIL]);
+    setValidated(_formValidate());
   };
 
   const passwordHandler = async val => {
     setValue(PASSWORD, val, true);
     await trigger([PASSWORD]);
+    setValidated(_formValidate());
   };
 
   const confirmPasswordHandler = async val => {
     setValue(CONFIRM_PASSWORD, val, true);
     await trigger([CONFIRM_PASSWORD]);
+    setValidated(_formValidate());
+  };
+
+  const _formValidate = () => {
+    let validated = 0;
+    const { email, password, confirm_password } = errors;
+    if (!email) ++validated;
+    if (!password) ++validated;
+    if (!confirm_password) ++validated;
+
+    const val = getValues();
+    if (val.password !== val.confirm_password) {
+      return false;
+    } else {
+      if (
+        val.password === '' ||
+        !val.password ||
+        val.confirm_password === '' ||
+        !val.confirm_password
+      ) {
+        return false;
+      }
+      return validated === 3 ? true : false;
+    }
   };
 
   const signUp = async val => {
     const { email, password } = val;
     try {
+      setErrorMessage('');
       setLoading(true);
       const signUpResponse = await Auth.signUp({
         username: email,
@@ -75,16 +103,11 @@ const RegistrationScreen = () => {
       });
       console.log('signUpResponse', signUpResponse);
       setLoading(false);
-      setInvalid({});
     } catch (err) {
       console.log('error: ', err);
       let wrong = null;
       !err.message ? (wrong = { message: err }) : (wrong = err);
-      if (err)
-        setInvalid(prevState => ({
-          ...prevState,
-          cognito: err,
-        }));
+      if (err) setErrorMessage(err);
       setLoading(false);
     }
   };
@@ -127,14 +150,19 @@ const RegistrationScreen = () => {
             </Text>
           )}
         </View>
-        <View style={styles.loginButtonContainer}>
-          <CommonButton onPress={handleSubmit(signUp)} label="Sign Up" />
-        </View>
-        {JSON.stringify(invalid) !== '{}' && (
-          <View style={{ marginTop: 20 }}>
-            <Text style={{ color: '#cc0000' }}>{invalid.cognito.message}</Text>
+        {error_message !== '' && (
+          <View style={{ marginVertical: 15 }}>
+            <Text style={{ color: '#cc0000' }}>{error_message}</Text>
           </View>
         )}
+        <View style={styles.loginButtonContainer}>
+          <CommonButton
+            onPress={handleSubmit(signUp)}
+            disabled={!validated || loading}
+            label={loading ? 'Signing Up...' : 'Sign Up'}
+            loader={loading}
+          />
+        </View>
       </View>
     </View>
   );

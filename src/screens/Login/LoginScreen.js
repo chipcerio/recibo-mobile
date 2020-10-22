@@ -45,11 +45,15 @@ const LoginScreen = () => {
   };
 
   const login = async (val) => {
-    const response = await Auth.signIn({
-      username: val.email,
-      password: val.password
-    });
-    console.log('response val', response);
+    try {
+      const response = await Auth.signIn({
+        username: val.email,
+        password: val.password
+      });
+      console.log('response val', response);
+    } catch (error) {
+      console.log('login error', error);
+    }
   };
 
   return (

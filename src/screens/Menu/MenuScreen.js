@@ -1,21 +1,22 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ReciboScreen = () => {
+const MenuScreen = () => {
   return (
-    <View>
-      <Text>Hello Recibo</Text>
-    </View>
+    <SafeAreaView>
+      <Text>Menu Screen</Text>
+    </SafeAreaView>
   );
 };
 
-ReciboScreen.tabOptions = () => ({
-  title: 'Recibo',
+MenuScreen.tabOptions = () => ({
+  title: 'Menu',
   tabBarIcon: props => {
     return (
       <MaterialCommunityIcons
-        name="receipt"
+        name="menu"
         size={25}
         color={props.focused ? '#3399FF' : '#333'}
       />
@@ -23,4 +24,4 @@ ReciboScreen.tabOptions = () => ({
   },
 });
 
-export default ReciboScreen;
+export default MenuScreen;

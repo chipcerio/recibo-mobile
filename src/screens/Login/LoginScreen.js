@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import Input from '../../components/Input/Input';
 import styles from './styles';
-import {useForm} from 'react-hook-form';
-import {USERNAME, PASSWORD, EMAIL} from '../../constants/field.constant';
+import { useForm } from 'react-hook-form';
+import { USERNAME, PASSWORD, EMAIL } from '../../constants/field.constant';
 import CommonButton from '../../components/CommonButton/CommonButton';
 import * as SCREEN from '../../constants/screen.constant';
 import {
@@ -12,6 +12,11 @@ import {
   CommonActions,
 } from '@react-navigation/native';
 import { Auth } from 'aws-amplify';
+import { useDispatch } from 'react-redux';
+import { CognitoAuthModel } from '../../models/auth.model';
+import AsyncStorage from '@react-native-community/async-storage';
+import { STORE_ACCESS_TOKEN } from '../../constants/common.constant';
+import { setAccessToken } from '../../redux/actions/auth/auth.actions';
 
 const LoginScreen = () => {
   const {
@@ -27,31 +32,44 @@ const LoginScreen = () => {
     password: '',
   });
   const values = watch();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    register({name: EMAIL}, {required: true});
-    register({name: PASSWORD}, {required: true});
+    register({ name: EMAIL }, { required: true });
+    register({ name: PASSWORD }, { required: true });
   }, [register]);
 
-  const emailHandler = async (val) => {
+  const emailHandler = async val => {
     setValue(EMAIL, val, true);
     await trigger([EMAIL]);
   };
 
-  const passwordHandler = async (val) => {
+  const passwordHandler = async val => {
     setValue(PASSWORD, val, true);
     await trigger([PASSWORD]);
   };
 
-  const login = async (val) => {
+  const login = async val => {
     try {
+      setLoading(true);
       const response = await Auth.signIn({
         username: val.email,
-        password: val.password
+        password: val.password,
       });
-      console.log('response val', response);
+      console.log('login response', response);
+      const auth = CognitoAuthModel(response.signInUserSession);
+      dispatch(setAccessToken(auth.accessToken.jwtToken));
+      AsyncStorage.setItem(STORE_ACCESS_TOKEN, auth.accessToken.jwtToken);
+      setLoading(false);
+      const resetAction = CommonActions.reset({
+        index: 0,
+        routes: [{ name: SCREEN.APP_NAVIGATOR }],
+      });
+      navigation.dispatch(resetAction);
     } catch (error) {
+      setLoading(false);
       console.log('login error', error);
     }
   };
@@ -60,19 +78,19 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <View style={styles.loginContainer}>
         <View style={styles.logoContainer}>
-          <Text style={{fontSize: 30}}>Recibo</Text>
+          <Text style={{ fontSize: 30 }}>Recibo</Text>
         </View>
-        <View style={{paddingVertical: 10}}>
+        <View style={{ paddingVertical: 10 }}>
           <Input
             label="Email"
             value={values.email ? values.email : ''}
             onChangeText={emailHandler}
           />
           {errors.email && (
-            <Text style={{color: '#cc0000'}}>Email is required.</Text>
+            <Text style={{ color: '#cc0000' }}>Email is required.</Text>
           )}
         </View>
-        <View style={{paddingVertical: 10}}>
+        <View style={{ paddingVertical: 10 }}>
           <Input
             label="Password"
             value={values.password ? values.password : ''}
@@ -80,19 +98,22 @@ const LoginScreen = () => {
             secureTextEntry={true}
           />
           {errors.password && (
-            <Text style={{color: '#cc0000'}}>Password is required.</Text>
+            <Text style={{ color: '#cc0000' }}>Password is required.</Text>
           )}
         </View>
         <View style={styles.loginButtonContainer}>
-          <CommonButton onPress={handleSubmit(login)} label="Login" />
+          <CommonButton
+            onPress={handleSubmit(login)}
+            label={loading ? 'Logging in' : 'Login'}
+            disabled={loading}
+            loader={loading}
+          />
         </View>
         <View style={styles.noAccountContainer}>
           <Text>Don't have an account yet?</Text>
           <Text
             onPress={() =>
-              navigation.dispatch(
-                StackActions.push(SCREEN.REGISTRATION_SCREEN),
-              )
+              navigation.dispatch(StackActions.push(SCREEN.REGISTRATION_SCREEN))
             }
             style={styles.clickToSignText}>
             Click here to Sign Up

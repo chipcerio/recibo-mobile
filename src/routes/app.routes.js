@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
-import {createStackNavigator} from '@react-navigation/stack';
-import {fromRight} from 'react-navigation-transitions';
+import { createStackNavigator } from '@react-navigation/stack';
+import { fromRight } from 'react-navigation-transitions';
 import * as SCREEN from '../constants/screen.constant';
-import {TabNavigator} from './tab.routes';
+import { TabNavigator } from './tab.routes';
 
 const AppStack = createStackNavigator();
 
@@ -19,7 +19,7 @@ export const AppNavigator = () => {
       <AppStack.Screen
         name={SCREEN.TAB_NAVIGATOR}
         component={TabNavigator}
-        options={{header: () => false}}
+        options={{ headerShown: false }}
       />
     </AppStack.Navigator>
   );

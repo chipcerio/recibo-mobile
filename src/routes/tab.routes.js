@@ -1,12 +1,13 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {HomeTabNavigator} from './tab-home.routes';
-import {ReciboTabNavigator} from './tab-recibo.routes';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { HomeTabNavigator } from './tab-home.routes';
+import { ReciboTabNavigator } from './tab-recibo.routes';
 // import MenuScreen from '../screens/Menu/MenuScreen';
 import HomeScreen from '../screens/Home/HomeScreen';
 import ReciboScreen from '../screens/Recibo/ReciboScreen';
+import MenuScreen from '../screens/Menu/MenuScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,11 +33,6 @@ export const TabNavigator = () => {
         activeTintColor: '#3399FF',
         inactiveTintColor: '#333',
         keyboardHidesTabBar: true,
-        style: {
-          height: 60,
-          paddingBottom: 10,
-          paddingTop: 10,
-        },
       }}>
       <Tab.Screen
         name="Home"
@@ -48,11 +44,11 @@ export const TabNavigator = () => {
         component={ReciboTabNavigator}
         options={ReciboScreen.tabOptions}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Menu"
         component={MenuScreen}
-        options={{header: () => false}}
-      /> */}
+        options={MenuScreen.tabOptions}
+      />
     </Tab.Navigator>
   );
 };

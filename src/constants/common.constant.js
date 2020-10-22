@@ -1,0 +1,1 @@
+export const STORE_ACCESS_TOKEN = 'access_token';

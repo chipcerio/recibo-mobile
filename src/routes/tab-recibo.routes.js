@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import {createStackNavigator} from '@react-navigation/stack';
-import {fromRight} from 'react-navigation-transitions';
+import { createStackNavigator } from '@react-navigation/stack';
+import { fromRight } from 'react-navigation-transitions';
 import * as SCREEN from '../constants/screen.constant';
 import ReciboScreen from '../screens/Recibo/ReciboScreen';
 
@@ -15,10 +15,6 @@ export const ReciboTabNavigator = () => (
       animationEnabled: false,
       transitionConfig: () => fromRight(500),
     }}>
-    <ReciboStack.Screen
-      name={SCREEN.RECIBO_SCREEN}
-      component={ReciboScreen}
-      options={{header: () => false}}
-    />
+    <ReciboStack.Screen name={SCREEN.RECIBO_SCREEN} component={ReciboScreen} />
   </ReciboStack.Navigator>
 );

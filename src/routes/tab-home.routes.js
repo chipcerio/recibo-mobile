@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import {createStackNavigator} from '@react-navigation/stack';
-import {fromRight} from 'react-navigation-transitions';
+import { createStackNavigator } from '@react-navigation/stack';
+import { fromRight } from 'react-navigation-transitions';
 import * as SCREEN from '../constants/screen.constant';
 import HomeScreen from '../screens/Home/HomeScreen';
 

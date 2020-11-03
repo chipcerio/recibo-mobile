@@ -71,10 +71,16 @@ const LoginScreen = () => {
       });
       navigation.dispatch(resetAction);
     } catch (error) {
+      console.log('error', error);
       setLoading(false);
       let wrong = null;
       !error.message ? (wrong = { message: error }) : (wrong = error);
       setErrorMessage(wrong.message);
+      const stackActions = StackActions.push(SCREEN.CONFIRMATION_CODE_SCREEN, {
+        email: val.email,
+      });
+      navigation.dispatch(stackActions);
+      console.log('############################ ', stackActions);
     }
   };
 

@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { fromRight } from 'react-navigation-transitions';
 import * as SCREEN from '../constants/screen.constant';
 import RegistrationScreen from '../screens/Registration/RegistrationScreen';
+import ConfirmationCodeScreen from '../screens/ConfirmationCode/ConfirmationCodeScreen';
 
 const AuthStack = createStackNavigator();
 
@@ -28,6 +29,11 @@ export const AuthNavigator = () => {
       <AuthStack.Screen
         name={SCREEN.REGISTRATION_SCREEN}
         component={RegistrationScreen}
+      />
+
+      <AuthStack.Screen
+        name={SCREEN.CONFIRMATION_CODE_SCREEN}
+        component={ConfirmationCodeScreen}
       />
     </AuthStack.Navigator>
   );

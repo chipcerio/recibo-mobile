@@ -103,11 +103,15 @@ const RegistrationScreen = () => {
       });
       console.log('signUpResponse', signUpResponse);
       setLoading(false);
+      const stackActions = StackActions.push(SCREEN.CONFIRMATION_CODE_SCREEN, {
+        email: email,
+      });
+      navigation.dispatch(stackActions);
     } catch (err) {
       console.log('error: ', err);
       let wrong = null;
       !err.message ? (wrong = { message: err }) : (wrong = err);
-      if (err) setErrorMessage(err);
+      if (err) setErrorMessage(wrong.message);
       setLoading(false);
     }
   };

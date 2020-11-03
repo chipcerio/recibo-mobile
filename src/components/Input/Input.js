@@ -1,10 +1,17 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {View, Text, TextInput, Animated} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, TextInput, Animated } from 'react-native';
 import styles from './styles';
 import PropTypes from 'prop-types';
 
-const Input = (props) => {
-  const {label, required, onChangeText, value, secureTextEntry, keyboardType} = props;
+const Input = props => {
+  const {
+    label,
+    required,
+    onChangeText,
+    value,
+    secureTextEntry,
+    keyboardType,
+  } = props;
   const [isFocused, setIsFocused] = useState(false);
   const _inputFocused = useRef(new Animated.Value(value !== '' ? 1 : 0))
     .current;
@@ -14,7 +21,7 @@ const Input = (props) => {
       toValue: isFocused || value !== '' ? 1 : 0,
       duration: 100,
       useNativeDriver: false,
-    }).start()
+    }).start();
   }, [isFocused, value]);
 
   const handleFocus = () => setIsFocused(true);
@@ -25,27 +32,33 @@ const Input = (props) => {
 
   return (
     <View style={styles.container}>
-      <Animated.Text style={[styles.label, {
-          top: _inputFocused.interpolate({
-            inputRange: [0, 1],
-            outputRange: [12, -10],
-          }),
-          left: _inputFocused.interpolate({
-            inputRange: [0, 1],
-            outputRange: [10, 6],
-          }),
-          fontSize: _inputFocused.interpolate({
-            inputRange: [0, 1],
-            outputRange: [16, 13],
-          }),
-          color: _inputFocused.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['rgba(0,0,0,0.5)', '#333'],
-          }),
-      }]}>{label}</Animated.Text>
+      <Animated.Text
+        style={[
+          styles.label,
+          {
+            top: _inputFocused.interpolate({
+              inputRange: [0, 1],
+              outputRange: [12, -10],
+            }),
+            left: _inputFocused.interpolate({
+              inputRange: [0, 1],
+              outputRange: [10, 6],
+            }),
+            fontSize: _inputFocused.interpolate({
+              inputRange: [0, 1],
+              outputRange: [16, 13],
+            }),
+            color: _inputFocused.interpolate({
+              inputRange: [0, 1],
+              outputRange: ['rgba(0,0,0,0.5)', '#333'],
+            }),
+          },
+        ]}>
+        {label}
+      </Animated.Text>
       <View style={styles.textInputContainer}>
         <TextInput
-          style={{width: '100%', paddingVertical: 10}}
+          style={{ width: '100%', paddingVertical: 10 }}
           onChangeText={onChangeText}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -60,7 +73,7 @@ const Input = (props) => {
 
 Input.defaulProps = {
   required: false,
-  value: ''
+  value: '',
 };
 
 Input.propTypes = {
